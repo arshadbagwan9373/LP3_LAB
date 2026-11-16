@@ -1,0 +1,52 @@
+import java.util.PriorityQueue;
+
+class Node{
+    char ch;
+    int freq;
+    Node left,right;
+
+    Node(char ch,int freq){
+        this.ch = ch;
+        this.freq = freq;
+    }
+}
+public class HuffDemo {
+
+    static void showcodes(Node root, String code){
+
+        if(root.left==null && root.right==null){
+            System.out.println(root.ch + ":" + code);
+            return;
+        }
+
+        showcodes(root.left, code + "0");
+        showcodes(root.right,code +"1");
+
+    }
+
+    public static void main(String[] args) {
+        char[] chars = {'a','c','d','e'};
+        int[] freq = {5,9,12,13};
+
+        PriorityQueue<Node> pq = new PriorityQueue<>((a,b)->a.freq - b.freq);
+
+        for(int i=0;i<4;i++){
+            pq.add(new Node(chars[i],freq[i]));
+
+        }
+
+        while(pq.size() > 1){
+            Node left = pq.poll();
+            Node right = pq.poll();
+
+            Node parent = new Node('-',left.freq + right.freq);
+            parent.left = left;
+            parent.right = right;
+
+            pq.add(parent);
+
+        }
+        System.out.println("********* Huffman Codes **********");
+        showcodes(pq.poll(),"");
+    }
+}
